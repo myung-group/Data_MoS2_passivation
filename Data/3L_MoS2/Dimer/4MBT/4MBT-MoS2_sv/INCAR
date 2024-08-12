@@ -1,0 +1,33 @@
+ENCUT = 600.00
+EDIFF = 1.00e-06
+EDIFFG = -0.03
+
+IBRION = 2
+ALGO = Normal
+ISMEAR = 0   ! for large cell
+SIGMA = 0.05 ! of semiconductors or insulators
+
+LCHARG = .FALSE.
+LWAVE = .FALSE.
+LREAL = Auto
+
+NELM = 2000
+NSW = 5000
+NCORE = 16
+KPAR = 4
+
+# ISPIN = 2   ! spin-polarized calc.
+
+## optB86b-vdW 
+GGA       = MK
+PARAM1    = 0.1234
+PARAM2    = 1.0
+AGGAC     = 0.0
+LUSE_VDW  = .TRUE.
+LASPH     = .TRUE.
+
+## Dipole corrections
+LDIPOL = .TRUE.
+DIPOL = 0.5 0.5 0.5
+IDIPOL = 3
+
