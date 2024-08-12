@@ -1,1 +1,1 @@
-# Data_MoS2_passivation
+This repository accompanies the paper " **Back-End-of-Line-Compatible Passivation of Sulfur Vacancies in MoS_2 Transistors with Benzenethils** " by Hacksoon Jung, Mingyu Kim, Gi-Beom Sim, Youngwoo Lee, Sumin Hong, Hyeonho Gu, Jaehyun Lee, Donghyeop Lee, Sanghyun Lee, Taoyu Zou, Kibum Kang, Chang-Woo Myung, Yong-Young Noh, and Jimin Kwon.
