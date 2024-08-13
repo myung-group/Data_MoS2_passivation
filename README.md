@@ -6,5 +6,5 @@ This repository accompanies the paper " **Back-End-of-Line-Compatible Passivatio
 
 * ```Figures/``` contains figures of the paper that obtained from ```Data/```
 * ```Scripts/``` contains Jupyter notebook and Python scripts that can reproduce figures.
-  * The DOS of MoS2 and defective MoS2 can be plotted using Jupyter notebook code ```Scripts/Density_of_states/Plot_DOS.ipynb```
+  * The DOS of $MoS_2$ and defective $MoS_2$ can be plotted using Jupyter notebook code ```Scripts/Density_of_states/Plot_DOS.ipynb```
   * Before plot the DOS, the compressed (*/SCF/DOS/doscar.zip) file should be extracted as DOSCAR
