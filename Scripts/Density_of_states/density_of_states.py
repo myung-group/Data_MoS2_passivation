@@ -2,6 +2,7 @@ import linecache
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+from ase.io import read
 
 def orbit_dos(orbit, dos, nedos, spin):    
     if spin:
@@ -41,9 +42,11 @@ def orbit_dos(orbit, dos, nedos, spin):
 
 def plot_dos_graph(filename, atoms_list, ene_range=None,
                    particular_atoms=None, particular_orbital=None, 
-                   spin=True, dos_range=None, total_dos=False, spin_sum=False, plot=True):
+                   spin=True, dos_range=None, total_dos=False, 
+                   spin_sum=False, plot=True, atoms_indices=None):
     
     if type(atoms_list) == str:        
+        atoms = read(atoms_list)
         POSCAR = open(atoms_list)
         poscar = POSCAR.readlines()
         symbols = poscar[5].split()
@@ -59,13 +62,13 @@ def plot_dos_graph(filename, atoms_list, ene_range=None,
         dos_list = ['tot']+atoms_list
 
     file = open(filename)
-    line_5 = file.readlines()[5].split()
-    EMIN = float(line_5[0])
-    EMAX = float(line_5[1])
+    line_5 = file.readlines().copy()[5].split()
+    EMAX = float(line_5[0])
+    EMIN = float(line_5[1])
     nedos = int(line_5[2])
     fermi_ene = float(line_5[3])
-    print("\n EMIN", "\tEMAX", "\tNEDOS", "\tE_FERMI")
-    print(f' {EMIN:.4g}\t{EMAX:.4g}\t{nedos:.4g}\t{fermi_ene:.4g}')
+    print("\n EMAX", "\tEMIN", "\tNEDOS", "\tE_FERMI")
+    print(f' {EMAX:.4g}\t{EMIN:.4g}\t{nedos:.4g}\t{fermi_ene:.4g}')
     
     for i in range(len(dos_list)):
         dos_list[i] = np.loadtxt(filename, skiprows=i*nedos+i+6, max_rows=nedos)
@@ -86,14 +89,29 @@ def plot_dos_graph(filename, atoms_list, ene_range=None,
     doscar = []
     label = []
     element_list = element_list.copy()
+    if atoms_indices != None:
+        print("\n PARTIAL DOS INFO.")
     if not total_dos:
         for i in element_list: 
-            num = atoms_list.index(i)+1 # because, if num == 0, this tag is about total dos
-            max_num = atoms_list.count(i)
+            if atoms_indices == None:
+                num = atoms_list.index(i)+1 # because, if num == 0, this tag is about total dos
+                max_num = atoms_list.count(i)
+                dos_ls = dos_list[num:num+max_num]
+            else:
+                num = atoms_list.index(i)+1 # because, if num == 0, this tag is about total dos
+                max_num = atoms_list.count(i)
+                index_list = list(np.arange(num, num+max_num, 1))
+                #print(index_list)
+                dos_ls = [dos_list[atoms_indices[j]+1] for j in range(len(atoms_indices)) \
+                          if atoms_indices[j]+1 in index_list]
+                print(f' {i}:\t{len(dos_ls)}')
+                #dos_ls = [dos_list[atoms_indices[j]] for j in range(len(atoms_indices)) \
+                #          if atoms[atoms_indices[j]].symbol == i]
+                #print(dos_ls)
             for j in orbit_list:
                 label.append(f'{i}-{j}')
                 doscar.append(orbit_dos(orbit = j, 
-                                        dos = dos_list[num:num+max_num], 
+                                        dos = dos_ls, 
                                         nedos = nedos,
                                         spin = spin))
         label.append(f'Total DOS')
@@ -103,6 +121,7 @@ def plot_dos_graph(filename, atoms_list, ene_range=None,
                                 spin = spin))
                                 # dos = dos_list[1:max_num] Total excepting Au
                                 # dos = dos_list[0:1] Total including Au
+        
     else:
         doscar.append(orbit_dos(orbit = 'tot', 
                                 dos = dos_list, 
