@@ -17,7 +17,7 @@ KPAR = 8
 # NPAR = 32
 # ISYM = 0
 
-# ISPIN = 2   ! spin-polarized calc.
+ISPIN = 2   ! spin-polarized calc.
 
 ## optB86b-vdW 
 GGA       = MK
