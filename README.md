@@ -4,7 +4,7 @@ This repository accompanies the paper " **Back-End-of-Line-Compatible Passivatio
   * To calculate dipole moment, electron density, and molecular electrostatic potential of TB molecules, you can use ```Data/DipoleMoment_MEP/*/dipole_moment.py```
   * For example,
     ```
-    python dipole_moment.py POSCAR-PFBT > PFBT.out
+    python dipole_moment.py PFBT.xyz > PFBT.out
     ```
   * Some of the outputs were uploaded as compressed (.zip) files because the data is huge. (DOSCAR, density.cube, and mep.cube). 
 
