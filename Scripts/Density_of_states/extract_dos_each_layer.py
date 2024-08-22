@@ -1,19 +1,20 @@
 import pandas as pd
 from ase.io import read
-
 from density_of_states import *
 
 
-data = {}
-
 ## 1) Set file path
-mos2_DOSCAR = "../../Data/GeometryRelax_Dimer_DOS/3L_MoS2/3L_MoS2/SCF/DOS/DOSCAR"
-mos2_sv_DOSCAR = "../../Data/GeometryRelax_Dimer_DOS/3L_MoS2/3L_MoS2_sv/SCF/DOS/DOSCAR"
+mos2_dos_zip = "../../Data/GeometryRelax_Dimer_DOS/3L_MoS2/3L_MoS2/SCF/DOS/doscar.zip"
+mos2_sv_dos_zip = "../../Data/GeometryRelax_Dimer_DOS/3L_MoS2/3L_MoS2_sv/SCF/DOS/doscar.zip"
+# Unzip "doscar.zip"
+mos2_DOSCAR = unzip_file(mos2_dos_zip)
+mos2_sv_DOSCAR = unzip_file(mos2_sv_dos_zip)
 
 mos2_POSCAR = "../../Data/GeometryRelax_Dimer_DOS/3L_MoS2/3L_MoS2/SCF/DOS/POSCAR"
 mos2_sv_POSCAR = "../../Data/GeometryRelax_Dimer_DOS/3L_MoS2/3L_MoS2_sv/SCF/DOS/POSCAR"
 
 ## 2) Extract from 3L-MoS2 DOS
+data = {}
 atoms = read(mos2_POSCAR)
 pos = atoms.get_positions()
 sheet_names = ['total', 'top', 'middle', 'bottom']

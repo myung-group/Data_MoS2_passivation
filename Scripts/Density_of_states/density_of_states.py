@@ -1,8 +1,11 @@
-import linecache
 import sys
+import os
+import zipfile
+import linecache
 import numpy as np
 import matplotlib.pyplot as plt
 from ase.io import read
+
 
 def orbit_dos(orbit, dos, nedos, spin):    
     if spin:
@@ -161,3 +164,26 @@ def plot_dos_graph(filename, atoms_list, ene_range=None,
     return doscar, energy_range, fermi_ene
 
 
+def unzip_file(zip_path):
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        file_name = zip_ref.namelist()[0]
+        extracted_path = zip_ref.extract(file_name, 
+                                         os.path.dirname(zip_path))
+    return extracted_path
+
+
+def get_band_gap(energy_range, dos, fermi_ene):
+    dos_dat = dos[0][0] + dos[0][1]
+    energy_r = energy_range.copy()
+    energy_r -= fermi_ene
+    band_tag = False
+    for i in range(len(dos_dat)):
+        if not band_tag and energy_r[i] >= 0:
+            ene_0 = energy_r[i]
+            band_tag = True
+        if band_tag == True and dos_dat[i] != 0 and energy_r[i] - ene_0 > 0.5:
+            band_gap = energy_r[i] - ene_0
+            print(f' Bandgap: {band_gap:.5g} eV')
+            break
+    return band_gap
+    
