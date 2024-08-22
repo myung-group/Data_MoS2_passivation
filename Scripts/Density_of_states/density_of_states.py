@@ -91,23 +91,20 @@ def plot_dos_graph(filename, atoms_list, ene_range=None,
     element_list = element_list.copy()
     if atoms_indices != None:
         print("\n PARTIAL DOS INFO.")
+
     if not total_dos:
         for i in element_list: 
             if atoms_indices == None:
-                num = atoms_list.index(i)+1 # because, if num == 0, this tag is about total dos
+                num = atoms_list.index(i)+1 
                 max_num = atoms_list.count(i)
                 dos_ls = dos_list[num:num+max_num]
             else:
-                num = atoms_list.index(i)+1 # because, if num == 0, this tag is about total dos
+                num = atoms_list.index(i)+1 
                 max_num = atoms_list.count(i)
                 index_list = list(np.arange(num, num+max_num, 1))
-                #print(index_list)
                 dos_ls = [dos_list[atoms_indices[j]+1] for j in range(len(atoms_indices)) \
                           if atoms_indices[j]+1 in index_list]
                 print(f' {i}:\t{len(dos_ls)}')
-                #dos_ls = [dos_list[atoms_indices[j]] for j in range(len(atoms_indices)) \
-                #          if atoms[atoms_indices[j]].symbol == i]
-                #print(dos_ls)
             for j in orbit_list:
                 label.append(f'{i}-{j}')
                 doscar.append(orbit_dos(orbit = j, 
@@ -119,9 +116,6 @@ def plot_dos_graph(filename, atoms_list, ene_range=None,
                                 dos = dos_list[0:1], 
                                 nedos = nedos,
                                 spin = spin))
-                                # dos = dos_list[1:max_num] Total excepting Au
-                                # dos = dos_list[0:1] Total including Au
-        
     else:
         doscar.append(orbit_dos(orbit = 'tot', 
                                 dos = dos_list, 
@@ -131,8 +125,6 @@ def plot_dos_graph(filename, atoms_list, ene_range=None,
     print(f'\n {label}\n')
     if plot:
         plt.figure(figsize=(10,7))
-        alpha = 0.8
-
         for i in range(len(doscar)):
             if i < len(doscar)-1:
                 if spin:
@@ -142,11 +134,8 @@ def plot_dos_graph(filename, atoms_list, ene_range=None,
                     else:
                         plt.plot(dos_list[0][:,0]-fermi_ene, doscar[i][0],linewidth=1.2, label=label[i])
                         plt.plot(dos_list[0][:,0]-fermi_ene, -doscar[i][1],linewidth=1.2, label=label[i])
-                    # plt.fill_between(dos_list[0][:,0]-fermi_ene,doscar[i][:,0],-doscar[i][:,1],alpha=alpha, label=label[i])
                 else:
                     plt.plot(dos_list[0][:,0]-fermi_ene,doscar[i],linewidth=1.2,label=label[i])
-                    # plt.fill_between(dos_list[0][:,0]-fermi_ene,doscar[i],alpha=alpha, label=label[i])
-                alpha -= 0.075
             else:
                 if spin:
                     if spin_sum:
@@ -157,18 +146,18 @@ def plot_dos_graph(filename, atoms_list, ene_range=None,
                         plt.plot(dos_list[0][:,0]-fermi_ene, -doscar[i][1],'black',linewidth=1.2,label='Tot/spin_down')  
                 else:
                     plt.plot(dos_list[0][:,0]-fermi_ene, doscar[i],'black',linewidth=1.2,label='Total DOS')
-            #plt.fill_between(dos_list[0][:,0]-fermi_ene, -doscar[i][1],linewidth=1, label=label[i]+'/spin_down')
+
             if dos_range is not None:
                 plt.ylim(dos_range)  
             if ene_range is not None:
-                plt.xlim(ene_range)       
+                plt.xlim(ene_range)
         plt.axvline(x=0, color='blue', alpha=0.9, ls='--', label=r'$E_{Fermi}$')
         plt.xlabel(r'$E_{DFT}$ - $E_{Fermi}$ (eV)', fontsize=13)
         plt.ylabel('Density of States', fontsize=13)
         plt.legend(loc='upper right', fontsize=12)
         plt.show() 
-    energy_range = dos_list[0][:,0]
 
+    energy_range = dos_list[0][:,0]
     return doscar, energy_range, fermi_ene
 
 
